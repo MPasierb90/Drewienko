@@ -18,6 +18,7 @@ class AnnouncementListView(ListView):
     template_name = 'portal_v1/home.html'
     context_object_name = 'ann_items'
     ordering = ['-date_posted']
+    paginate_by = 3  # dzielenie calej listy ogloszen na strony po 1 ogloszen
 
 
 class AnnouncementDetailView(DetailView):
@@ -52,3 +53,18 @@ class AnnouncementDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView
         if self.request.user == ann.author:
             return True
         return False
+
+
+class SearchResultsView(ListView):
+    model = Announcement
+    context_object_name = 'ann_items'
+    template_name = 'portal_v1/search.html'
+    paginate_by = 3  # dzielenie calej listy ogloszen na strony po 1 ogloszen
+
+    def get_queryset(self):
+        return Announcement.objects.filter(title__icontains=self.request.GET.get("q")).order_by('-date_posted')
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["q"] = f'&q={self.request.GET.get("q")}'
+        return context

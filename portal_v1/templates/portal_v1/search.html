@@ -1,17 +1,22 @@
 {% extends "portal_v1/base.html" %}
 {% block content %}
+<a><font color=#cc3333></br>Wyniki wyszukiwania:</a></font>
+{% if ann_items %}
     {% for ann_item in ann_items %}
         <article class="media content-section">
-            <img class="article-img rounded" style="width:20%; margin-right: 10px" src="{{ ann_item.picture.url }}">
+            <img class="rounded-circle article-img" src="{{ ann_item.picture.url }}">
             <div class="media-body">
                 <div class="article-metadata">
-                    <a class="mr-2" href="{% url 'user-profile' ann_item.author.id %}">{{ ann_item.author }}</a>
+                    <a class="mr-2" href="#">{{ ann_item.author }}</a>
                     <small class="text-muted">{{ ann_item.date_posted|date:"F d, Y"}}</small>
                 </div>
-                <h2><a class="article-title" href="{% url 'announcement-detail' ann_item.id %}">{{ ann_item.title }}</a></h2>
+                <h2><b><a class="article-title" href="{% url 'announcement-detail' ann_item.id %}">{{ ann_item.title }}</a></h2></b>
                 <h2><a class="article-title"><font color=#cc3333><b>{{ ann_item.price }} zł</b></font></a></h2>
                 <p class="article-content">{{ ann_item.content|truncatechars:170 }}</p>
             </div>
         </article>
     {%endfor%}
+{% else %}
+<p></br>͡๏̯͡๏ Nic nie znaleziono</p>
+{% endif %}
 {% endblock content%}

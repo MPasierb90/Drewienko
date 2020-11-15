@@ -1,6 +1,6 @@
 from django.urls import path
 from announcements.views import AnnouncementCreateView, AnnouncementListView, AnnouncementDetailView, \
-    AnnouncementUpdateView, AnnouncementDeleteView
+    AnnouncementUpdateView, AnnouncementDeleteView, SearchResultsView
 from users.views import LoginView, logout_view, RegisterView, ChangePassword, UserProfileView
 from django.conf.urls.static import static
 from django.conf import settings
@@ -17,6 +17,7 @@ urlpatterns = [
     path("logout/", logout_view, name="logout"),
     path("register/", RegisterView.as_view(), name="register"),
     path("change_password/", ChangePassword.as_view(), name="change_password"),
+    path("search/", SearchResultsView.as_view(), name='search_result')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:

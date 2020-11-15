@@ -16,6 +16,8 @@
     <!-- Load an icon library -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+    <title>Drewienko.pl - Sprzedaż i wymiana mebli</title>
+
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href=" {% static 'base.css' %} ">
 
@@ -66,9 +68,9 @@
                     </div>
                 </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            <form action="{% url 'search_result' %}" method="get" class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Czego szukasz?" name="q" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Szukaj </button>
             </form>
         </div>
     </nav>
@@ -79,6 +81,27 @@
             </div>
             <div class="col-8">
                 {% block content %}{% endblock %}
+
+<!-- pagination (dzielenie listy ogloszen na strony)-->
+                <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1{{ q }}">first</a>
+                        <a href="?page={{ page_obj.previous_page_number }}{{ q }}">&laquo; previous</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}{{ q }}">next &raquo;</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}{{ q }}">last</a>
+                    {% endif %}
+                </span>
+                </div>
+<!-- pagination end -->
+
             </div>
             <div class="col-2">
                 {% block right-side %}{% endblock %}
