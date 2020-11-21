@@ -1,6 +1,6 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm, User
+# from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.core.validators import EmailValidator
 from .models import UserProfile
@@ -30,13 +30,17 @@ class SignUpForm(UserCreationForm):
 class UserProfileEditForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('city', 'phone_number', 'avatar')  # Note that we didn't mention user field here.
+        fields = ('city', 'phone_number', 'avatar')
 
-    def save(self, user=None):
+    def save(self, commit=True):
         user_profile = super(UserProfileEditForm, self).save(commit=False)
-        if user:
-            user_profile.user = user
-        user_profile.save()
+        user_profile.city = self.cleaned_data['city']
+        user_profile.phone_number = self.cleaned_data['phone_number']
+        user_profile.avatar = self.cleaned_data['avatar']
+
+        if commit:
+            user_profile.save()
+
         return user_profile
 
 
@@ -44,3 +48,13 @@ class UserEditForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name')
+
+    def save(self, commit=True):
+        user = super(UserEditForm, self).save(commit=False)
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+
+        if commit:
+            user.save()
+
+        return user

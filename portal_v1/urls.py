@@ -15,7 +15,6 @@ urlpatterns = [
     path('announcements/new/', AnnouncementCreateView.as_view(), name='announcement-create'),
     path('users/<int:pk>/', UserProfileView.as_view(), name='user-profile'),
     path('users/my_announcements/', MyAnnouncementListView.as_view(), name='my-announcements'),
-    # path('users/<int:pk>/new', NewUserProfileView.as_view(), name="new-user-profile"),
     path('users/<int:pk>/edit', UserProfileEdit.as_view(), name="edit-user-profile"),
     path('login/', LoginView.as_view(), name="login"),
     path("logout/", logout_view, name="logout"),

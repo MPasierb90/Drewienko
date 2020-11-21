@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.signals import user_logged_out, user_logged_in
 from django.dispatch import receiver
 from django.contrib.auth.forms import PasswordChangeForm, UserChangeForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -12,30 +12,15 @@ from django.views.generic import CreateView, FormView, DetailView, TemplateView,
 from .forms import SignUpForm, UserEditForm, UserProfileEditForm
 from .models import User, UserProfile
 
-class UserEditView(FormView, LoginRequiredMixin):
+
+class UserEditView(FormView):
     template_name = "portal_v1/user_profile_edit.html"
-    form_class = UserChangeForm
-
-    def post(self, request, *args, **kwargs):
-        user_change = self.form_class(request.POST)
-        if user_change.is_valid():
-            user_change.save()
-            return self.render_to_response(self.get_context_data(success=True))
-        else:
-            return self.render_to_response(self.get_context_data(user_change=user_change))
+    form_class = UserEditForm
 
 
-class UserProfileEditView(FormView, LoginRequiredMixin):
+class UserProfileEditView(FormView):
     template_name = "portal_v1/user_profile_edit.html"
     form_class = UserProfileEditForm
-
-    def post(self, request, *args, **kwargs):
-        user_profile_edit = self.form_class(request.POST)
-        if user_profile_edit.is_valid():
-            user_profile_edit.save()
-            return self.render_to_response(self.get_context_data(success=True))
-        else:
-            return self.render_to_response(self.get_context_data(user_profile_edit=user_profile_edit))
 
 
 class UserProfileView(DetailView):
@@ -44,9 +29,9 @@ class UserProfileView(DetailView):
     context_object_name = "user_profile"
 
 
-class UserProfileEdit(TemplateView):
+class UserProfileEdit(TemplateView, LoginRequiredMixin):
     template_name = "portal_v1/user_profile_edit.html"
-    success_url = "user-profile-edit"
+    success_url = "edit-user-profile"
 
     def get(self, request, *args, **kwargs):
         user_change = UserEditForm(self.request.GET or None)
@@ -55,6 +40,16 @@ class UserProfileEdit(TemplateView):
         context['user_change'] = user_change
         context['user_profile_edit'] = user_profile_edit
         return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        user_change = UserEditView.form_class(request.POST)
+        user_profile_edit = UserProfileEditView.form_class(request.POST)
+        if user_profile_edit.is_valid() and user_change.is_valid():
+            user_change.save()
+            user_profile_edit.save()
+            return redirect('user-profile')
+        else:
+            return redirect('edit-user-profile')
 
 
 class ChangePassword(FormView, LoginRequiredMixin):
