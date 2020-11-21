@@ -1,13 +1,14 @@
 from django.urls import path
 from announcements.views import AnnouncementCreateView, AnnouncementListView, AnnouncementDetailView, \
-    AnnouncementUpdateView, AnnouncementDeleteView, SearchResultsView
+    AnnouncementUpdateView, AnnouncementDeleteView, SearchResultsView, main_page, announcements_by_category, FilterAnnouncementList
 from users.views import LoginView, logout_view, RegisterView, ChangePassword, UserProfileView
 from django.conf.urls.static import static
 from django.conf import settings
 
 
 urlpatterns = [
-    path('', AnnouncementListView.as_view(), name='announcement-home'),
+    path('', main_page, name='announcement-home'),
+    path('filter/<name>/', announcements_by_category, name='filter'),
     path('announcements/annouc-<int:pk>/', AnnouncementDetailView.as_view(), name='announcement-detail'),
     path('announcements/annouc-<int:pk>/update/', AnnouncementUpdateView.as_view(), name='announcement-update'),
     path('announcements/annouc-<int:pk>/delete/', AnnouncementDeleteView.as_view(), name='announcement-delete'),

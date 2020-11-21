@@ -3,12 +3,16 @@ from django.urls import reverse
 from django.utils import timezone
 
 
-# class Category(models.Model):
-#     # name = models.CharField(choices=((1, 'szafy'), (2, 'komody'), (3, 'sofy'),
-#     (4, 'zestawy wypoczynkowe'), (5, 'meblościanki'), (6, 'ławy i stoliki'), (7, 'krzesła')), max_length=100)
-#
-#     def __str__(self):
-#         return self.name
+class Category(models.Model):
+    objects = models.Manager()
+    name = models.CharField(verbose_name='Kategoria', max_length=150)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
 
 
 class Announcement(models.Model):
@@ -20,9 +24,7 @@ class Announcement(models.Model):
     date_posted = models.DateTimeField(verbose_name="Data opublikowania", default=timezone.now)
     author = models.ForeignKey('auth.User', verbose_name="Autor", on_delete=models.CASCADE)
     price = models.DecimalField(verbose_name="Cena", max_digits=10, decimal_places=2)
-    category = models.CharField(verbose_name="Kategoria", choices=(
-        ('szafy', 'szafy'), ('komody', 'komody'), ('sofy', 'sofy'), ('zestawy wypoczynkowe', 'zestawy wypoczynkowe'),
-        ('meblościanki', 'meblościanki'), ('ławy i stoliki', 'ławy i stoliki'), ('krzesła', 'krzesła')), max_length=100)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     shipping = models.CharField(verbose_name="Wysyłka", choices=(('tak', 'tak'), ('nie', 'nie')), default='nie',
                                 max_length=100)
     sell_or_exchange = models.CharField(verbose_name="Wymiana/Sprzedaż",

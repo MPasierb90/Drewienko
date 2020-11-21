@@ -36,21 +36,14 @@
                      <a class="nav-link" href="/">Strona główna</a>
                 </li>
                 <li class="nav-item dropdown">
-                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Kategorie
-                     </a>
-                     <div class="dropdown-menu" role="menu">
-                        <a class="dropdown-item" href="#">Szafy</a>
-                        <a class="dropdown-item" href="#">Komody</a>
-                        <a class="dropdown-item" href="#">Ławy i stoliki</a>
-                        <a class="dropdown-item" href="#">Meblościanki</a>
-                        <a class="dropdown-item" href="#">Sofy i kanapy</a>
-                        <a class="dropdown-item" href="#">Łóżka</a>
-                        <a class="dropdown-item" href="#">Zestawy wypoczynkowe</a>
-                        <a class="dropdown-item" href="#">Krzesła</a>
-                        <div class="dropdown-divider border"></div>
-                        <a class="dropdown-item" href="#">Inne..</a>
-                     </div>
+                    </a>
+                    <div class="dropdown-menu" role="menu">
+                        {% for category in all_categories %}
+                        <a class="dropdown-item" href="/filter/{{ category }}/">{{ category }} </a>
+                        {% endfor %}
+                    </div>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -81,27 +74,6 @@
             </div>
             <div class="col-8">
                 {% block content %}{% endblock %}
-
-<!-- pagination (dzielenie listy ogloszen na strony)-->
-                <div class="pagination">
-                <span class="step-links">
-                    {% if page_obj.has_previous %}
-                        <a href="?page=1{{ q }}">first</a>
-                        <a href="?page={{ page_obj.previous_page_number }}{{ q }}">&laquo; previous</a>
-                    {% endif %}
-
-                    <span class="current">
-                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                    </span>
-
-                    {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}{{ q }}">next &raquo;</a>
-                        <a href="?page={{ page_obj.paginator.num_pages }}{{ q }}">last</a>
-                    {% endif %}
-                </span>
-                </div>
-<!-- pagination end -->
-
             </div>
             <div class="col-2">
                 {% block right-side %}{% endblock %}
