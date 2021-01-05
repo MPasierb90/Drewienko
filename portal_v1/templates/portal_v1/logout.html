@@ -1,0 +1,9 @@
+{% extends "portal_v1/base.html" %}
+{% block content %}
+    <h1 style="color: green">Wylogowałeś się pomyślnie</h1>
+    <div class="border-top pt-3">
+        <small class="text-muted">
+            <a href="{% url 'login' %}">Zaloguj się ponownie</a>
+        </small>
+    </div>
+{% endblock %}

@@ -1,13 +1,22 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.signals import user_logged_out, user_logged_in, user_login_failed
+from django.dispatch import receiver
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
-from django.views.generic import CreateView, FormView
+from django.views.generic import CreateView, FormView, DetailView
 from .forms import SignUpForm
+
+
+class UserProfileView(DetailView):
+    model = User
+    template_name = "portal_v1/user_profile.html"
+    context_object_name = "user_profile"
+
 
 
 class ChangePassword(FormView, LoginRequiredMixin):
@@ -37,7 +46,7 @@ class RegisterView(CreateView):
         return super(RegisterView, self).form_valid(form)
 
     def get_success_url(self) -> str:
-        return reverse("index")
+        return reverse("login")
 
 
 class LoginView(View):
@@ -45,7 +54,7 @@ class LoginView(View):
 
     def get(self, request):
         if request.user.is_authenticated:
-            return redirect("index")
+            return redirect("announcement-home")
         return render(request, self.template_name, {})
 
     def post(self, request):
@@ -57,12 +66,24 @@ class LoginView(View):
 
         if user:
             login(request, user)
-            return redirect("index")
+            return redirect("announcement-home")
 
         messages.error(request, "Nie ma takiego użytkownika")
-        return redirect("user:login")
+        return redirect("login")
 
 
-def logout_view(request):
-    logout(request)
-    return redirect("index")
+# def logout_view(request):
+#     logout(request)
+#     return redirect("logout")
+
+# @receiver(user_logged_out)
+# def on_user_logged_out(sender, request, **kwargs):
+#     messages.add_message(request, messages.INFO, 'Wylogowano pomyślnie')
+#
+# @receiver(user_logged_in)
+# def on_user_logged_in(sender, request, **kwargs):
+#     messages.add_message(request, messages.INFO, 'Zalogowano pomyślnie')
+#
+# @receiver(user_login_failed)
+# def on_user_login_failed(sender, request, **kwargs):
+#     messages.add_message(request, messages.INFO, 'Błędna nazwa użytkownika lub hasło')

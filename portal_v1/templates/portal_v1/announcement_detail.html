@@ -1,24 +1,38 @@
 {% extends "portal_v1/base.html" %}
 {% block content %}
     <article class="media content-section">
-        <img class="rounded-circle article-img" src="{{ object.picture.url }}">
+        <img class="article-img rounded" style="width:30%; margin-right: 10px " src="{{ object.picture.url }}">
         <div class="media-body">
             <div class="article-metadata">
-                <a class="mr-2" href="#">{{ object.author }}</a>
+                <a class="mr-2" href="{% url "user-profile" object.author.pk %}">{{ object.author }}</a>
                 <small class="text-muted">{{ object.date_posted|date:"F d, Y" }}</small>
                 {% if object.author == user %}
                     <div>
-                        <a class="btn btn-secondary btn-sm mt-1 mb-1"  href="{% url 'announcement-update' object.id %}">Update</a>
-                        <a class="btn btn-danger btn-sm mt-1 mb-1"  href="{% url 'announcement-delete' object.id %}">Delete</a>
+                        <a class="btn btn-secondary btn-sm mt-1 mb-1"  href="{% url 'announcement-update' object.id %}">Edytuj</a>
+                        <a class="btn btn-danger btn-sm mt-1 mb-1"  href="{% url 'announcement-delete' object.id %}">Usuń</a>
+{#                        <span class="btn btn-primary btn-sm mt-1 mb-1 float-right" onclick="promowanie()" >Promuj</span>#}
                     </div>
                 {% endif %}
             </div>
             <h2 class="article-title">{{ object.title }}</h2>
-            <p class="article-content">{{ object.content }}</p>
-            <p class="article-content">cena: {{ object.price }} zł</p>
-            <p class="article-content">kategoria: {{ object.category }}</p>
-            <p class="article-content">Czy jest możliwa wysyłka? {{ object.shipping }}</p>
-            <p class="article-content">Sprzedaż czy wymiana? {{ object.sell_or_exchange }}</p>
+                <p>{{ object.content }}</p>
+        </div>
+    </article>
+{#    <script>#}
+{#    function promowanie() {    }#}
+{#    </script>#}
+{% endblock %}
+{% block right-side %}
+    <article class="side-content" style="text-align: left">
+        <div class="">
+            <ul>
+                <p>Cena: {{ object.price }} zł</p>
+                <p>kategoria: {{ object.category }}</p>
+                <p>Wysyłka: {{ object.shipping }}</p>
+                <p>Sprzedaż czy wymiana?: {{ object.sell_or_exchange }}</p>
+            </ul>
         </div>
     </article>
 {% endblock %}
+
+

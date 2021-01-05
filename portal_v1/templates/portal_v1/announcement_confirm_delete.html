@@ -1,0 +1,17 @@
+{% extends "portal_v1/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+        <div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Usuwanie ogłoszenia</legend>
+                <h2>Czy na pewno chcesz usunąć to ogłoszenie?</h2>
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-danger" type="submit">Tak, usuń</button>
+                <a class="btn btn-outline-secondary" href="{% url 'announcement-detail' announcement.id %}">Anuluj</a>
+            </div>
+        </form>
+    </div>
+{%  endblock %}

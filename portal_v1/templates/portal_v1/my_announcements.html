@@ -1,6 +1,6 @@
 {% extends "portal_v1/base.html" %}
 {% block content %}
-    {% for ann_item in ann_items %}
+    {% for ann_item in my_ann_items %}
         <article class="media content-section">
             <img class="article-img rounded" style="width:20%; margin-right: 10px" src="{{ ann_item.picture.url }}">
             <div class="media-body">

@@ -1,0 +1,40 @@
+{% extends "portal_v1/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+         {% block left-side %}
+             {% if object.userprofile.user == user %}
+             <div class="side-content" style="text-align: left">
+                 <ul class="navbar-left">
+                    <a href="#">Edytuj profil</a>
+                    <a href="{% url 'announcement-create' %}">Dodaj ogłoszenie</a>
+                    <a href="{% url 'my-announcements' %}">Moje ogłoszenia</a>
+                 </ul>
+             </div>
+             {% endif %}
+         {% endblock %}
+{% block content %}
+    <article class="media content-section">
+    <div class="article-title"></div>
+{% if user.userprofile.avatar %}
+    <img class="rounded-circle" style="width:10%; margin-right: 10px" src="{{ user.userprofile.avatar.url }}">
+{% else %}
+    <img class="rounded-circle" style="width:10%; margin-right: 10px" src="{% static 'default-avatar.jpg' %}">
+{% endif %}
+        <div class="media-body">
+            <div class="article-metadata">
+                <h2 class="article-title">Profil użytkownika: <inf class="text-info">{{ object.username }}</inf></h2>
+                <ul class="user-data" style="margin-top: 20px">
+                    <p>Imię: {{ object.first_name }}</p>
+                    <p>Nazwisko: {{ object.last_name }}</p>
+                    <p>Miasto: {{ object.userprofile.city }}</p>
+                    <p>Telefon: {{ object.userprofile.phone_number }}</p>
+                </ul>
+            </div>
+        </div>
+    </article>
+    <div>
+    {% if object.userprofile.user != user %}
+        <h3>Ogłoszenia tego użytkownika: </h3>
+    {% endif %}
+    </div>
+{%  endblock %}
